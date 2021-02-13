@@ -1,4 +1,5 @@
 import { Card } from "react-bootstrap"
+import Rating from './Rating'
 
 /** {product} = Props, we can destructuring the props element with the {} keys, and modify
  * the name, with this, we can use only the product var, and not props.product._id, for example.
@@ -16,9 +17,9 @@ const Product = ({product}) => {
                     </Card.Title>
                 </a>
             <Card.Text as='div'>
-                <div className='my-3'>
-                    {product.rating} from {product.reviews} reviews
-                </div>
+               <Rating 
+               value={product.rating}
+               text={`${product.numReviews} reviews`} />
             </Card.Text>
             <Card.Text as='h3'>
                 ${product.price}
