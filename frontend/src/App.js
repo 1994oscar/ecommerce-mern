@@ -1,7 +1,10 @@
-import {Container} from 'react-bootstrap'
-import Header from './components/Header'
-import Footer from './components/Footer'
-import HomeScreen from './screens/HomeScreen'
+import React                            from 'react'
+import {BrowserRouter as Router, Route} from 'react-router-dom'
+import {Container}                      from 'react-bootstrap'
+import Header                           from './components/Header'
+import Footer                           from './components/Footer'
+import HomeScreen                       from './screens/HomeScreen'
+import ProductScreen                    from './screens/ProductScreen'
 
 /**
  * App = Contain the principal structure of the aplication, all the component
@@ -17,20 +20,34 @@ import HomeScreen from './screens/HomeScreen'
  * 
  * Header = The Header component that is created in the Header.js files
  * Footer = The Footer component that is created in the Footer.js files
+ * 
+ * React-Router: We need to implement React Router Globally, to use in our app.
+ * 
+ * Normally when we no use React Router we put the name of the component that we need to show, 
+ * like <HomeScreen />, with react router we can put the router of this component. 
+ * 
+ * <Route path = '/' component={HomeScreen} exact />
+ * 
+ * We can use how many <Route /> component web need.
+ * 
+ * path='/product/:id', :id is the ID of the product, that we pass in the Link in <Product /> component, 
+ * here in the App.js file, we create the Route to Link the products dinamically
+ * 
  */
 
-function App() {
+const App = () => {
   return (
-    <>
-    <Header/>
+    <Router basename="/">
+      <Header/>
       <main className='py-3'>
         <Container>
-          <HomeScreen />
+          <Route path='/' component={HomeScreen} exact />
+          <Route path='/product/:id' component={ProductScreen} />
         </Container>
       </main>
-    <Footer/>
-    </>
-  );
+      <Footer />
+    </Router>
+  )
 }
 
 export default App;

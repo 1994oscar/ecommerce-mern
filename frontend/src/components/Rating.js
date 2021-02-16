@@ -53,7 +53,7 @@ Rating.defaultProps = {
     color: '#f8e825'
 }
 
-/** We specify the types of Prop that we pass */
+/** We specify the types of Prop that we need */
 Rating.propTypes = {
     value: PropTypes.number.isRequired,
     text: PropTypes.string.isRequired,
