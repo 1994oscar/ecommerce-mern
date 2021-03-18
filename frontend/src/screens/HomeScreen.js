@@ -1,11 +1,30 @@
-import React from 'react'
+import React , {useState, useEffect} from 'react'
 import products from '../products'
 import Product from '../components/Product'
 import {Row, Col, Container} from 'react-bootstrap'
+import axios from 'axios'
 
-/** This is the Home page wdiget */
+/** This is the Home page widget */
 
 const HomeScreen = () => {
+
+    const [products, setProducts] = useState([]);
+
+    /* 
+        useEffect is execute as soon is the component load.
+        With useEffecte we can use Axios to make request to the server. 
+    */
+
+    useEffect(() => {
+
+        const fecthProducts = async () => {
+            const {data} = await axios.get('/api/products');
+            
+            setProducts(data);
+        }
+
+        fecthProducts();
+    }, []);
 
     return (
        <>
