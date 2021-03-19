@@ -9,7 +9,7 @@ const reviewSchema = mongoose.Schema({
 //We create the Schema caracterist
 const productSchema = mongoose.Schema({
     user: {
-        type: mongoose.Schema.type.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'User'
     },
