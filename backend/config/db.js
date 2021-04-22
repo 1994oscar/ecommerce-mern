@@ -1,7 +1,8 @@
 import mongoose from 'mongoose'
-
+//import dotenv from 'dotenv' 
+//import colors from 'colors'
 //DB Connection
-
+//dotenv.config()
 const connectDB = async () => {
     try {
         const conn = await mongoose.connect(process.env.MONGO_URI, {
@@ -17,4 +18,5 @@ const connectDB = async () => {
     }
 }
 
+//connectDB()
 export default connectDB

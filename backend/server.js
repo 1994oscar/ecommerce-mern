@@ -3,13 +3,13 @@ import dotenv from 'dotenv'
 import colors from 'colors'
 import {notFound, errorHandler} from './middleware/middlewareHandler.js'
 import connectDB from './config/db.js'
-import products from './data/products.js'
+//import products from './data/products.js'
 
 import productRoutes from './routes/productRoutes.js'
 //We call the .env file, to access to all the enviroment variables
 dotenv.config()
-connectDB()
-
+connectDB()  
+  
 const app = express()
 
 app.get('/', (req, res) => {
