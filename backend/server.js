@@ -29,9 +29,13 @@ app.get('/', (req, res) => {
 //-----------------------------------
 
 //--- Routes by Module ------------------ 
+
+//--- Products Routes ------------
 app.use('/api/products', productRoutes); // -> Products Module.
+
+//--- Users & Auth Routes ------------
 app.use('/api/users', userRoutes); // Auth & User Module. 
-//--- End Routes Modules ----------------
+//--- End Routes by Modules ----------------
 
 app.use(notFound);
 app.use(errorHandler);
