@@ -71,7 +71,7 @@ const orderSchema = mongoose.Schema({
     timestamp: true
 });
 
-//We build the User model
+//We build the Order model
 const Order = mongoose.model('Order', orderSchema);
 
 export default Order; 

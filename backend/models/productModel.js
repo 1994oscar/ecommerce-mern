@@ -58,7 +58,7 @@ const productSchema = mongoose.Schema({
     timestamp: true
 });
 
-//We build the User model
+//We build the Product model
 const Product = mongoose.model('Product', productSchema);
 
 export default Product; 
