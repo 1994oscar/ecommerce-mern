@@ -8,22 +8,20 @@ import generateToken from '../utils/generateToken.js'
 const authUser = asyncHandler(async (req, res) => {
     const {email, password} = req.body.data;
 
-    //console.log(req.body.data.email)
-   const user = await User.findOne({email})
-    //console.log(user);
+    const user = await User.findOne({email})
 
-   if(user && (await user.matchPassword(password))){
-    res.json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        isAdmin: user.isAdmin,
-        token: generateToken(user._id),
-    });
-   } else {
-       res.status(401);
-       throw new Error('Invalid email or password');
-   }
+    if(user && (await user.matchPassword(password))){
+        res.json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin,
+            token: generateToken(user._id),
+        });
+        } else {
+        res.status(401);
+        throw new Error('Invalid email or password');
+    }
 });
 
 // @desc    Register a new user
@@ -64,8 +62,9 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users/profile
 // @access  Public
 const getUserProfile = asyncHandler(async (req, res) => {
-    //Access to the global authorized user data
+    //Access to the global authorized user data req.user._id
     const userId = req.user._id;
+    //------------------------------------------------------
     const user = await User.findById(userId);
 
     if(user){
@@ -81,4 +80,38 @@ const getUserProfile = asyncHandler(async (req, res) => {
     }
 });
 
-export {authUser, registerUser, getUserProfile};
+
+// @desc    Update User Profile
+// @route   PUT /api/users/profile
+// @access  Private
+const updateUserProfile = asyncHandler(async (req, res) => {
+    //Access to the global authorized user data req.user._id
+    const userId = req.user._id;
+   // console.log(userId);
+    //-----------------------------------------
+    const user = await User.findById(userId);
+    console.log(req)
+    if(user){
+       
+        user.name   = req.body.data.name    || user.name;
+        user.email  = req.body.data.email   || user.email;
+        
+        if(req.body.password){
+            user.password = req.body.data.password
+        }
+
+        const updateUser = await user.save();
+
+        res.json({
+            _id: updateUser._id,
+            name: updateUser.name,
+            email: updateUser.email,
+            isAdmin: updateUser.isAdmin,
+        });
+    }else{
+        res.status(401);
+        throw new Error('User not found');
+    }
+});
+
+export {authUser, registerUser, updateUserProfile, getUserProfile}; 
