@@ -7,6 +7,7 @@ import connectDB from './config/db.js'
 //We need to import the Routes App, to bring access to the backend
 import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
+import orderRoutes from './routes/orderRoutes.js'
 
 //We call the .env file, to access to all the enviroment variables
 //--- Database Connection -----------
@@ -32,6 +33,9 @@ app.get('/', (req, res) => {
 
 //--- Products Routes ------------
 app.use('/api/products', productRoutes); // -> Products Module.
+
+//--- Order Routes ------------
+app.use('/api/orders', orderRoutes); // -> Order Module.
 
 //--- Users & Auth Routes ------------
 app.use('/api/users', userRoutes); // Auth & User Module. 
