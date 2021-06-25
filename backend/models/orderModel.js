@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 //We create the Schema caracterist
 const orderSchema = mongoose.Schema({
-    name : {
+    user : {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'User',
