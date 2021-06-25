@@ -1,6 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import colors from 'colors'
+import path from 'path'
 import {notFound, errorHandler} from './middleware/middlewareHandler.js'
 import connectDB from './config/db.js'
 
@@ -23,11 +24,6 @@ const app = express();
 app.use(express.json());
 //------------------------------------------
 
-//--- Index Route -------------------
-app.get('/', (req, res) => {
-    res.send('API is running...');
-});
-//-----------------------------------
 
 //--- Routes by Module ------------------ 
 
@@ -41,6 +37,21 @@ app.use('/api/orders', orderRoutes); // -> Order Module.
 app.use('/api/users', userRoutes); // Auth & User Module. 
 //--- End Routes by Modules ----------------
 
+const __dirname = path.resolve();
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+
+if(process.env.NODE_ENV === 'production'){
+    app.use(express.static(path.join(__dirname, '/frontend/build')));
+    app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 
+        'frontend', 'build', 'index.html')));
+} else{
+    //--- Index Route -------------------
+        app.get('/', (req, res) => {
+            res.send('API is running...');
+        });
+    //-----------------------------------
+}
+ 
 app.use(notFound);
 app.use(errorHandler);
 
