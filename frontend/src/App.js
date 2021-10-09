@@ -5,13 +5,14 @@ import Header                           from './components/Header'
 import Footer                           from './components/Footer'
 import HomeScreen                       from './screens/HomeScreen'
 import ProductScreen                    from './screens/ProductScreen'
-import CartScreen                       from './screens/CartScreen'
+import CartScreen                       from './screens/checkout/CartScreen'
 import LoginScreen                      from './screens/LoginScreen'
 import RegisterScreen                   from './screens/RegisterScreen'
 import ProfileScreen                    from './screens/ProfileScreen'
-import ShippingScreen                   from './screens/ShippingScreen'
-import PaymentScreen                    from './screens/PaymentScreen'
-import PlaceOrderScreen                 from './screens/PlaceOrderScreen'
+import ShippingScreen                   from './screens/checkout/ShippingScreen'
+import PaymentScreen                    from './screens/checkout/PaymentScreen'
+import PlaceOrderScreen                 from './screens/checkout/PlaceOrderScreen'
+import OrderScreen                      from './screens/checkout/OrderScreen'
 
 /**
  * App = Contain the principal structure of the aplication, all the component
@@ -57,6 +58,7 @@ const App = () => {
           <Route path='/shipping'     component={ShippingScreen} />
           <Route path='/payment'      component={PaymentScreen} />
           <Route path='/placeorder'   component={PlaceOrderScreen} />
+          <Route path='/order/:id'    component={OrderScreen} />
         </Container>
       </main>
       <Footer />

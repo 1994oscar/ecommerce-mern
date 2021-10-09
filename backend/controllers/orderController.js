@@ -17,7 +17,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
         totalPrice
     } = req.body;
 
-    console.log(req.body)
+    //console.log(req.body)
 
 if(orderItems && orderItems.length === 0) {
     res.status(400); //Bad Request
@@ -44,4 +44,22 @@ if(orderItems && orderItems.length === 0) {
 
 });
 
-export {addOrderItems}; 
+// @desc    Get order by ID
+// @route   GET /api/orders/:id
+// @access  Private
+
+const getOrderById = asyncHandler(async (req, res) => {
+
+    const order = await (await Order.findById(req.params.id)).
+                  populate('user', 'name email');
+
+    if(order) {
+        res.json(order);
+    }else{
+        res.status(404);
+        throw new Error('Order not found');
+    }
+
+});
+
+export {addOrderItems , getOrderById}; 
