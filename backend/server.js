@@ -9,9 +9,11 @@ import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 
-dotenv.config();
+const __dirname = path.resolve();
 
-connectDB();
+dotenv.config({ path: path.join(__dirname, '.env') });
+
+connectDB(); 
 
 const app = express();
 
@@ -24,7 +26,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);
 app.get('/api/config/paypal', (req, res) => res.send(process.env.PAYPAL_CLIENT_ID));
 
-const __dirname = path.resolve();
+
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 
