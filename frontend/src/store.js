@@ -4,9 +4,9 @@ import {composeWithDevTools} from 'redux-devtools-extension'
 import {productListReducer, productDetailReducer}  from './reducers/productReducers'
 import {cartReducer} from './reducers/cartReducers'
 import {userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateReducer} from './reducers/userReducer'
-import {orderCreateReducer, orderGetReducer} from './reducers/orderReducer'
+import {orderCreateReducer, orderGetReducer, orderPayReducer, orderListMyReducer} from './reducers/orderReducer'
 
-//--- Redux Reducers ---
+/** --- Redux Reducers --- */
 const reducer = combineReducers({
     productList: productListReducer,
     productDetails: productDetailReducer,
@@ -16,33 +16,35 @@ const reducer = combineReducers({
     userDetails: userDetailsReducer,
     userUpdate: userUpdateReducer,
     orderCreate: orderCreateReducer,
-    orderGet: orderGetReducer
-})
-//-----------------------
+    orderGet: orderGetReducer,
+    orderPay: orderPayReducer,
+    orderGetMy: orderListMyReducer,
+});
 
-//--- Local Storage Data ---
+
+/** --- Local Storage Data --- */
 const cartItemsFromStorage = localStorage.getItem('cartItems') ?
                              JSON.parse(localStorage.getItem('cartItems')) : [];
 const userInfoFromStorage = localStorage.getItem('userInfo') ?
                              JSON.parse(localStorage.getItem('userInfo')) : null;
 const shippingAddressFromStorage = localStorage.getItem('shippingAddress') ?
                              JSON.parse(localStorage.getItem('shippingAddress')) : {};
-//--------------------------
 
-//--- Redux Initial State ---
+
+/** --- Redux Initial State --- */
 const initialState = {
     cart: {cartItems: cartItemsFromStorage, shippingAddress: shippingAddressFromStorage},
     userLogin: {userInfo: userInfoFromStorage}
 }
-//---------------------------
 
-const middleWare = [thunk]
 
-//--- Redux Store ---
+const middleWare = [thunk];
+
+/** --- Redux Store --- */
 const store = createStore (
     reducer, 
     initialState, 
-    composeWithDevTools(applyMiddleware(...middleWare)))
-//-------------------
+    composeWithDevTools(applyMiddleware(...middleWare)));
+
 
 export default store 

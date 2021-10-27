@@ -1,42 +1,61 @@
 import React, {useState, useEffect} from 'react'
-import {Form, Button, Row, Col}     from 'react-bootstrap'
+import {LinkContainer} from 'react-router-bootstrap'
+import {Form, Button, Row, Col, Table}     from 'react-bootstrap'
 import {useDispatch, useSelector}   from 'react-redux'
 import Message  from '../components/Message'
 import Loader   from '../components/Loader'
 import {getUserDetails, update, login}  from '../actions/userAction'
-
+import {getMyOrders} from '../actions/orderAction'
 const ProfileScreen = ({location, history}) => {
 
-    const [name, setName]           = useState('')
-    const [email, setEmail]         = useState('')
-    const [password, setPassword]   = useState('')
-    const [confirmPassword, setConfirmPassword]   = useState('')
-    const [message, setMessage]     = useState(null)
+    const [name, setName]           = useState('');
+    const [email, setEmail]         = useState('');
+    const [password, setPassword]   = useState('');
+    const [confirmPassword, setConfirmPassword]   = useState('');
+    const [message, setMessage]     = useState(null);
 
-    const dispatch      = useDispatch()
+    const dispatch      = useDispatch();
 
-    const userDetails   = useSelector(state => state.userDetails)
-    const {loading, error, user} = userDetails
+    const userDetails   = useSelector(state => state.userDetails);
+    const {loading, error, user} = userDetails;
 
-    const userLogin     = useSelector(state => state.userLogin)
-    const {userInfo}    = userLogin
+    const userLogin     = useSelector(state => state.userLogin);
+    const {userInfo}    = userLogin;
 
-    const userUpdateProfile     = useSelector(state => state.userUpdate)
-    const updateResult    = userUpdateProfile
+    const userUpdateProfile     = useSelector(state => state.userUpdate);
+    const updateResult    = userUpdateProfile;
+
+    const orderGetMy = useSelector(state => state.orderGetMy);
+    const {orders, success:successOrders, loading:loadingOrders, error:errorOrders} = orderGetMy;
     //const redirect = location.search ? location.search.split('=')[1] : '/'
 
+    const [myOrders, setMyOrders] = useState([]);
     useEffect(()=> {    
         if(!userInfo){
-            history.push('/login')         
+            history.push('/login');         
         }else{
             if(!user.name){
-                dispatch(getUserDetails('profile'))
-            }else{
-                setName(user.name)
-                setEmail(user.email)
+                dispatch(getUserDetails('profile'));                   
+            }else{ 
+                setName(user.name);
+                setEmail(user.email);           
             }
         }
-    }, [dispatch,history, userInfo, user])
+      
+    }, [dispatch,history, userInfo, user]);
+
+    useEffect(() => {
+        
+        if(successOrders){          
+            setMyOrders(orders);         
+        }else{
+            dispatch(getMyOrders());   
+        }
+        console.log(orders)
+        // eslint-disable-next-line
+    }, [orders]) 
+
+   
 
     const submitHandler = (e) => {
         e.preventDefault();      
@@ -107,6 +126,45 @@ const ProfileScreen = ({location, history}) => {
         </Col>
         <Col md={9}>
             <h2>My Orders</h2>
+            {loadingOrders ? <Loader/> : 
+             errorOrders ? <Message variant='danger'>{errorOrders}</Message> :
+             (
+                 <Table striped bordered hover responsive className='table-sm'>
+                     <thead>
+                         <tr>
+                             <th>ID</th>
+                             <th>DATE</th>
+                             <th>TOTAL</th>
+                             <th>PAID</th>
+                             <th>DELIVERED</th>
+                             <th></th>
+                         </tr>
+                         </thead>
+                         <tbody>
+                             { successOrders ?
+                                myOrders.map(order => (
+                                    <tr key={order._id}>
+                                        <td>{order._id}</td>
+                                        <td>{order.createdAt}</td>
+                                        <td>{order.totalPrice}</td>
+                                        <td>{order.isPaid ? order.paidAt: (
+                                            <i className='fas fa-times' style={{color:'red'}}> Not Paid</i>
+                                        )}</td>
+                                        <td>{order.isDelivered? 'Delivered':  (
+                                             <i className='fas fa-times' style={{color:'red'}}> Not Delivered</i>
+                                        )}</td>
+                                        <td>
+                                            <LinkContainer to={`/order/${order._id}`}>
+                                                <Button variant='light'>Details</Button>
+                                            </LinkContainer>
+                                        </td>
+                                    </tr> 
+                                )): (<tr></tr>)                       
+                             }
+                         </tbody> 
+                  
+                 </Table>
+             )}
         </Col>
     </Row>
     
