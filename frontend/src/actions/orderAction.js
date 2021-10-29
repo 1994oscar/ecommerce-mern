@@ -20,7 +20,7 @@
 
             const {userLogin: {userInfo}} = getState(); 
 
-            axios.defaults.headers.common['Content-Type']   = 'aplication/json';
+            axios.defaults.headers.common['Content-Type']   = 'application/json';
             axios.defaults.headers.common['Authorization']  = `Bearer ${userInfo.token}`;
 
             /** Request */
@@ -52,7 +52,7 @@
             });
         
             const {userLogin: {userInfo}} = getState(); 
-            axios.defaults.headers.common['Content-Type']   = 'aplication/json';
+            axios.defaults.headers.common['Content-Type']   = 'application/json';
             axios.defaults.headers.common['Authorization']  = `Bearer ${userInfo.token}`;
             
             /** Request */
@@ -83,7 +83,7 @@
             });
         
             const {userLogin: {userInfo}} = getState(); 
-            axios.defaults.headers.common['Content-Type']   = 'aplication/json';
+            axios.defaults.headers.common['Content-Type']   = 'application/json';
             axios.defaults.headers.common['Authorization']  = `Bearer ${userInfo.token}`;
             
             /** Request */
@@ -114,7 +114,7 @@
             });
         
             const {userLogin: {userInfo}} = getState(); 
-            axios.defaults.headers.common['Content-Type']   = 'aplication/json';
+            axios.defaults.headers.common['Content-Type']   = 'application/json';
             axios.defaults.headers.common['Authorization']  = `Bearer ${userInfo.token}`;
             
             /** Request */
