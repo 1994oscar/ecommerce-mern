@@ -25,7 +25,7 @@ const Header = () => {
                         <LinkContainer to='/cart'>
                             <Nav.Link><i className='fas fa-shopping-cart'></i>Cart</Nav.Link>
                         </LinkContainer>
-                        {userInfo ? (
+                        {userInfo && !userInfo.isAdmin && (
                             <NavDropdown title={userInfo.name} id='username'>
                                 <LinkContainer to='/profile'>
                                     <NavDropdown.Item>Profile</NavDropdown.Item>
@@ -34,10 +34,30 @@ const Header = () => {
                                     Logout
                                 </NavDropdown.Item>
                             </NavDropdown>
-                        ):  <LinkContainer to='/login'>
+                        )
+                        }
+                        {userInfo && userInfo.isAdmin && (
+                              <NavDropdown title= 'Admin' id='userAdmin'>
+                              <LinkContainer to='/admin/users-list'>
+                                  <NavDropdown.Item>Users</NavDropdown.Item>
+                              </LinkContainer>
+                              <LinkContainer to='/admin/products-list'>
+                                  <NavDropdown.Item>Products</NavDropdown.Item>
+                              </LinkContainer>
+                              <LinkContainer to='/admin/orders-list'>
+                                  <NavDropdown.Item>Orders</NavDropdown.Item>
+                              </LinkContainer>
+                              <NavDropdown.Item onClick={logoutHandler}>
+                                  Logout
+                              </NavDropdown.Item>
+                          </NavDropdown>
+                        ) }  
+                        
+                        {!userInfo && 
+                            <LinkContainer to='/login'>
                                 <Nav.Link><i className='fas fa-user'></i>Sign In</Nav.Link>
-                            </LinkContainer> 
-                        }                  
+                            </LinkContainer>  
+                        }               
                     </Nav> 
                 </Navbar.Collapse>
             </Container>

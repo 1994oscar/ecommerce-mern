@@ -19,6 +19,10 @@ const UserListScreen = () => {
 
     }, [dispatch]);
 
+    const deleteUserHandler = (userId) => {
+        alert('button');
+    }
+
     return (
         <>
             <h1>Users</h1>
@@ -41,9 +45,18 @@ const UserListScreen = () => {
                                 <tr key={user._id}>
                                 <td>{user._id}</td>
                                 <td>{user.name}</td>
-                                <td>{user.email}</td>
-                                <td>{user.isAdmin ? 'Admin': 'User'}</td>
-                                {user.isAdmin? (<td></td>) : (<td><Button variant='danger' className='btn-sm'>Delete</Button></td>)}
+                                <td><a href={`mailto:{user.email}`}>{user.email}</a></td>
+                                <td><span style={user.isAdmin ? {color:'green'}: {color:'blue'}}>{user.isAdmin ? 'Admin': 'User'}</span></td>
+                                {user.isAdmin? (<td></td>) : 
+                                (
+                                    <td>
+                                        <LinkContainer to={`/user/${user._id}/edit`}>
+                                            <Button variant='warning' className='btn-sm'> <i className='fas fa-edit'></i> </Button>
+                                        </LinkContainer>
+                                        <Button variant='danger' className='btn-sm' onClick={ () => deleteUserHandler(user._id)}><i className='fas fa-trash'></i></Button>
+                                    </td>
+                                        
+                                )}
                                 </tr>
                             ))
                         }
