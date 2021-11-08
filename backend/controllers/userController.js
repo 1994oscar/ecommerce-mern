@@ -87,10 +87,10 @@ const getUserProfile = asyncHandler(async (req, res) => {
 const updateUserProfile = asyncHandler(async (req, res) => {
     //Access to the global authorized user data req.user._id
     const userId = req.user._id;
-   // console.log(userId);
+ 
     //-----------------------------------------
     const user = await User.findById(userId);
-    console.log(req)
+    
     if(user){
        
         user.name   = req.body.data.name    || user.name;
@@ -109,7 +109,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
             isAdmin: updateUser.isAdmin,
         });
     }else{
-        res.status(401);
+        res.status(404);
         throw new Error('User not found');
     }
 });
@@ -123,4 +123,19 @@ const getUsers = asyncHandler(async (req, res) => {
    
 });
 
-export {authUser, registerUser, updateUserProfile, getUserProfile, getUsers}; 
+// @desc    Delete user
+// @route   DELETE /api/users/:id
+// @access  Private/Admin
+const deleteUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+
+    if(user){
+        await user.remove();
+        res.json({message: 'User removed'});
+    }else{
+        res.status(404);
+        throw new Error('User not found');
+    }
+});
+
+export {authUser, registerUser, updateUserProfile, getUserProfile, getUsers, deleteUser}; 

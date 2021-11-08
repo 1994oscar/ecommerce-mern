@@ -4,23 +4,38 @@ import {Table, Button} from 'react-bootstrap'
 import {useDispatch, useSelector} from "react-redux"
 import Message from '../../components/Message'
 import Loader from '../../components/Loader'
-import {getUserList} from "../../actions/userAction"
+import {getUserList, deleteUser} from "../../actions/userAction"
 
 
-const UserListScreen = () => {
+const UserListScreen = ({history}) => {
 
     const dispatch = useDispatch();
 
     const users = useSelector(state => state.userList);
     const {userList, success, loading, error} = users;
 
-    useEffect(() => {
-        dispatch(getUserList());
+    const userLogin = useSelector(state => state.userLogin);
+    const {userInfo} = userLogin;
 
-    }, [dispatch]);
+    const userDelete = useSelector(state => state.userDelete);
+    const {error: deleteUserError, 
+        success: deleteUserSuccess, 
+        message:deleteUserMessage, 
+        loading:deleteUserLoading} = userDelete; 
+
+    useEffect(() => {
+
+        /** Only admin user can access to users list */
+        if(userInfo && userInfo.isAdmin){
+            dispatch(getUserList());
+        }else {
+            history.push('/login'); 
+        }
+
+    }, [dispatch, history]);
 
     const deleteUserHandler = (userId) => {
-        alert('button');
+       dispatch(deleteUser(userId));
     }
 
     return (
@@ -28,6 +43,9 @@ const UserListScreen = () => {
             <h1>Users</h1>
             {loading    && <Loader/>}
             {error && <Message variant='danger'>{error}</Message>}
+            {deleteUserLoading    && <Loader/>}
+            {deleteUserError && <Message variant='danger'>{deleteUserError}</Message>}
+            {deleteUserSuccess && <Message variant='success'>{deleteUserMessage}</Message>}
             {success && (
                 <Table striped bordered hover responsive className='table-sm'>
                     <thead>
