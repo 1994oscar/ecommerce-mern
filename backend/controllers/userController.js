@@ -156,12 +156,12 @@ const getUserById = asyncHandler(async (req, res) => {
 });
 
 // @desc    Update User Profile
-// @route   PUT /api/users/profile
+// @route   PUT /api/users/:id
 // @access  Private/Admin
 const updateUser = asyncHandler(async (req, res) => {
     //Access to the global authorized user data req.user._id
     const userId = req.params.id;
- 
+    console.log(req.body)
     //-----------------------------------------
     const user = await User.findById(userId);
     

@@ -5,14 +5,22 @@ import {
     USER_DETAILS_FAIL,
     USER_DETAILS_REQUEST,
     USER_DETAILS_RESET,
-    USER_DETAILS_SUCCESS, USER_INFO_FAIL, USER_INFO_REQUEST, USER_INFO_SUCCESS, USER_LIST_FAIL, USER_LIST_REQUEST, USER_LIST_RESET, USER_LIST_SUCCESS,
+    USER_DETAILS_SUCCESS,
+    USER_INFO_FAIL,
+    USER_INFO_REQUEST,
+    USER_INFO_SUCCESS,
+    USER_LIST_FAIL,
+    USER_LIST_REQUEST,
+    USER_LIST_RESET,
+    USER_LIST_SUCCESS,
     USER_LOGIN_FAIL,
     USER_LOGIN_LOGOUT,
     USER_LOGIN_REQUEST,
     USER_LOGIN_SUCCESS,
     USER_REGISTER_FAIL,
     USER_REGISTER_REQUEST,
-    USER_REGISTER_SUCCESS,
+    USER_REGISTER_SUCCESS, USER_UPDATE_ADMIN_FAIL,
+    USER_UPDATE_ADMIN_REQUEST, USER_UPDATE_ADMIN_SUCCESS,
     USER_UPDATE_FAIL,
     USER_UPDATE_REQUEST,
     USER_UPDATE_SUCCESS
@@ -84,12 +92,12 @@ export const register = (name, email, password) => async (dispatch) => {
             dispatch({
             type: USER_REGISTER_SUCCESS,
             payload: data
-        })
+        });
 
         dispatch({
             type: USER_LOGIN_SUCCESS,
             payload: data
-        })
+        });
 
         localStorage.setItem('userInfo', JSON.stringify(data));
 
@@ -98,7 +106,7 @@ export const register = (name, email, password) => async (dispatch) => {
             type: USER_REGISTER_FAIL,
             payload: error.response && error.response.data.message ? 
                      error.response.data.message : error.message
-        })
+        });
     }
 }
 
@@ -122,14 +130,14 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
             dispatch({
             type: USER_DETAILS_SUCCESS,
             payload: data
-        })
+        });
 
     } catch (error) {
         dispatch({
             type: USER_DETAILS_FAIL,
             payload: error.response && error.response.data.message ? 
                      error.response.data.message : error.message
-        })
+        });
     }
 }
 
@@ -140,7 +148,7 @@ export const update = (user) => async (dispatch, getState) => {
             type: USER_UPDATE_REQUEST
         });
 
-        const {userLogin: {userInfo}} = getState()
+        const {userLogin: {userInfo}} = getState();
 
         axios.defaults.headers.common['Content-Type']  = 'application/json';
         axios.defaults.headers.common['Authorization'] = `Bearer ${userInfo.token}`;
@@ -150,14 +158,14 @@ export const update = (user) => async (dispatch, getState) => {
         dispatch({
             type: USER_UPDATE_SUCCESS,
             payload: result.data
-        })
+        });
 
     } catch (error) {
         dispatch({
             type: USER_UPDATE_FAIL,
             payload: error.response && error.response.data.message ? 
                      error.response.data.message : error.message
-        })
+        });
     }
 }
 
@@ -176,14 +184,14 @@ export const getUserList = () => async (dispatch, getState) => {
         dispatch({
             type: USER_LIST_SUCCESS,
             payload: userList
-        })
+        });
 
     } catch (error) {
         dispatch({
             type: USER_LIST_FAIL,
             payload: error.response && error.response.data.message ?
                 error.response.data.message : error.message
-        })
+        });
     }
 }
 
@@ -202,14 +210,42 @@ export const getUserById = (id) => async (dispatch, getState) => {
         dispatch({
             type: USER_INFO_SUCCESS,
             payload: user
-        })
+        });
 
     } catch (error) {
         dispatch({
             type: USER_INFO_FAIL,
             payload: error.response && error.response.data.message ?
                 error.response.data.message : error.message
-        })
+        });
+    }
+}
+
+export const updateUserAdmin = (data) => async (dispatch, getState) => {
+    try {
+
+        dispatch({
+            type: USER_UPDATE_ADMIN_REQUEST
+        });
+
+        const {userLogin: {userInfo}} = getState();
+
+        axios.defaults.headers.common['Content-Type']  = 'application/json';
+        axios.defaults.headers.common['Authorization'] = `Bearer ${userInfo.token}`;
+
+        const {data:user} = await axios.put(`/api/users/${data.idUser}`, {data});
+
+        dispatch({
+            type: USER_UPDATE_ADMIN_SUCCESS,
+            payload: user
+        });
+
+    } catch (error) {
+        dispatch({
+            type: USER_UPDATE_ADMIN_FAIL,
+            payload: error.response && error.response.data.message ?
+                error.response.data.message : error.message
+        });
     }
 }
 

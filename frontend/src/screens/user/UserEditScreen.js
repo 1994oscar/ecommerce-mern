@@ -1,58 +1,54 @@
 import React, {useState, useEffect} from 'react'
-import {Link} from 'react-router-dom'
 import {Form, Button, Row, Col}     from 'react-bootstrap'
 import {useDispatch, useSelector}   from 'react-redux'
 import Message  from '../../components/Message'
 import Loader   from '../../components/Loader'
-import {getUserById}  from '../../actions/userAction'
+import {getUserById, updateUserAdmin}  from '../../actions/userAction'
 import FormContainer from '../../components/FormContainer'
 
-const UserEditScreen = ({location, history, match}) => {
+const UserEditScreen = ({location, match}) => {
 
+    const idUser = match.params.id;
     const [name, setName]           = useState('');
     const [email, setEmail]         = useState('');
-    const [password, setPassword]   = useState('');
-    const [confirmPassword, setConfirmPassword]   = useState('');
-    const [message, setMessage]     = useState(null);
+    const [isAdmin, setIsAdmin]     = useState(false);
 
     const dispatch = useDispatch();
 
     const userInfo = useSelector(state => state.userInfo);
-
     const {loading, error, success, user} = userInfo;
+
+    const userUpdate = useSelector(state => state.userUpdateAdmin);
+    const {loading:updateLoading, error:updateError, success:updateSuccess, user:updateUser} = userUpdate;
 
     const redirect = location.search ? location.search.split('=')[1] : '/';
 
-    /*useEffect(()=> {    
-        if(userInfo){
-            history.push(redirect)         
-        }
-    }, [history, userInfo, redirect])*/
+    useEffect(() => {
+        dispatch(getUserById(match.params.id));
+    },[dispatch]);
 
     useEffect(() => {
-        if(!user){
-            dispatch(getUserById(match.params.id));
-        }else{
+        if(success){
             setName(user.name);
+            setEmail(user.email);
+            setIsAdmin(user.isAdmin);
         }
-    }, [user, dispatch]);  
+    },[success]);
 
     const submitHandler = (e) => {
-        e.preventDefault();      
-        if(password !== confirmPassword){
-            setMessage('Passwords do not match')
-        }
-        //DISPATCH REGISTER
-        //dispatch(register(name,email, password))
+        e.preventDefault();
+        const data = {idUser, name, email, isAdmin};
+        dispatch(updateUserAdmin(data));
     }
- 
+
     return (
         <FormContainer>
-            <h1>Sign Up</h1>
+            <h1>Edit User</h1>
 
-            {message    && <Message variant='danger'>{message}</Message>}
-            {error      && <Message variant='danger'>{error}</Message>} 
-            {loading    && <Loader/>}
+            {updateSuccess    && <Message variant='success'>'The user was updated'</Message>}
+            {updateError      && <Message variant='danger'>{updateError}</Message>}
+            {loading          && <Loader/>}
+            {updateLoading    && <Loader/>}
 
             <Form onSubmit={submitHandler}>
                 <Form.Group controlId='name'>
@@ -75,38 +71,16 @@ const UserEditScreen = ({location, history, match}) => {
                     </Form.Control>
                 </Form.Group>
 
-                <Form.Group controlId='password'>
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control 
-                        type='password'
-                        placeholder='Enter password'
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}>
-                    </Form.Control>
+                <Form.Group controlId='isAdmin'>
+                    <Form.Check
+                        type='checkbox'
+                        label='Is Admin'
+                        checked={isAdmin}
+                        onChange={(e) => setIsAdmin(e.target.checked)}>
+                    </Form.Check>
                 </Form.Group>
-
-                <Form.Group controlId='confirmPassword'>
-                    <Form.Label>Confirm Password</Form.Label>
-                    <Form.Control 
-                        type='password'
-                        placeholder='Confirm the password'
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}>
-                    </Form.Control>
-                </Form.Group>
-
-                <Button type='submit' variant='primary'>Create user</Button>
+                <Button type='submit' variant='primary'>Save changes</Button>
             </Form>
-
-            <Row clasname='py-3'>
-                <Col>
-                    Have an account? {''}
-                    <Link to={ redirect ? `/login?redirect=${redirect}`:'/login'}>
-                        Login
-                    </Link>
-                </Col>
-
-            </Row>
         </FormContainer>
     )
 }
