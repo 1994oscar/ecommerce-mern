@@ -10,6 +10,7 @@ import LoginScreen                      from './screens/user/LoginScreen'
 import UserListScreen                   from './screens/user/UserListScreen'
 import RegisterScreen                   from './screens/user/RegisterScreen'
 import ProfileScreen                    from './screens/user/ProfileScreen'
+import UserEditScreen                   from './screens/user/UserEditScreen'
 import ShippingScreen                   from './screens/checkout/ShippingScreen'
 import PaymentScreen                    from './screens/checkout/PaymentScreen'
 import PlaceOrderScreen                 from './screens/checkout/PlaceOrderScreen'
@@ -34,6 +35,7 @@ const App = () => {
           <Route path='/order/:id'    component={OrderScreen}/>
 
           <Route path='/admin/users-list' component={UserListScreen}/>
+          <Route path='/admin/user/:id/edit' component={UserEditScreen}/>
         </Container>
       </main>
       <Footer />

@@ -28,8 +28,9 @@ const authUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
+    console.log(req.body)
     const {name, email, password} = req.body.data;
-
+    
     const userExists = await User.findOne({email})
     
     if(userExists){
@@ -138,4 +139,49 @@ const deleteUser = asyncHandler(async (req, res) => {
     }
 });
 
-export {authUser, registerUser, updateUserProfile, getUserProfile, getUsers, deleteUser}; 
+// @desc    Get user by ID
+// @route   GET /api/users/:id
+// @access  Private/Admin 
+const getUserById = asyncHandler(async (req, res) => { 
+    const user = await User.findById(req.params.id)
+                  .select('-password');
+    
+    if(user){
+     res.json(user);
+    }else{
+        res.status(404);
+        throw new Error('User not found');
+    }
+      
+});
+
+// @desc    Update User Profile
+// @route   PUT /api/users/profile
+// @access  Private/Admin
+const updateUser = asyncHandler(async (req, res) => {
+    //Access to the global authorized user data req.user._id
+    const userId = req.params.id;
+ 
+    //-----------------------------------------
+    const user = await User.findById(userId);
+    
+    if(user){
+       
+        user.name   = req.body.data.name    || user.name;
+        user.email  = req.body.data.email   || user.email;
+        user.isAdmin = req.body.data.isAdmin;
+
+        const updateUser = await user.save();
+
+        res.json({
+            _id: updateUser._id,
+            name: updateUser.name,
+            email: updateUser.email,
+            isAdmin: updateUser.isAdmin,
+        });
+    }else{
+        res.status(404);
+        throw new Error('User not found');
+    }
+});
+export {authUser, registerUser, updateUserProfile, getUserProfile, getUsers, deleteUser, getUserById, updateUser}; 

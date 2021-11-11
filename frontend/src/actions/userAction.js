@@ -5,7 +5,7 @@ import {
     USER_DETAILS_FAIL,
     USER_DETAILS_REQUEST,
     USER_DETAILS_RESET,
-    USER_DETAILS_SUCCESS, USER_LIST_FAIL, USER_LIST_REQUEST, USER_LIST_RESET, USER_LIST_SUCCESS,
+    USER_DETAILS_SUCCESS, USER_INFO_FAIL, USER_INFO_REQUEST, USER_INFO_SUCCESS, USER_LIST_FAIL, USER_LIST_REQUEST, USER_LIST_RESET, USER_LIST_SUCCESS,
     USER_LOGIN_FAIL,
     USER_LOGIN_LOGOUT,
     USER_LOGIN_REQUEST,
@@ -181,6 +181,32 @@ export const getUserList = () => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: USER_LIST_FAIL,
+            payload: error.response && error.response.data.message ?
+                error.response.data.message : error.message
+        })
+    }
+}
+
+export const getUserById = (id) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: USER_INFO_REQUEST
+        });
+
+        const {userLogin: {userInfo}} = getState();
+
+        axios.defaults.headers.common['Authorization'] = `Bearer ${userInfo.token}`;
+
+        const {data:user} = await axios.get(`/api/users/${id}`);
+
+        dispatch({
+            type: USER_INFO_SUCCESS,
+            payload: user
+        })
+
+    } catch (error) {
+        dispatch({
+            type: USER_INFO_FAIL,
             payload: error.response && error.response.data.message ?
                 error.response.data.message : error.message
         })
