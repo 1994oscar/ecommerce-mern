@@ -1,11 +1,11 @@
 import React, {useState, useEffect}            from 'react'
 import {Link}           from 'react-router-dom'
-import Rating            from '../components/Rating'
+import Rating            from '../../components/Rating'
 import {Row, Col, Image, ListGroup, Card, Button, ListGroupItem, Form} from 'react-bootstrap'
 import {useDispatch, useSelector} from 'react-redux'
-import {listProductDetails} from '../actions/productAction'
-import Loader from '../components/Loader'
-import Message from '../components/Message'
+import {listProductDetails} from '../../actions/productAction'
+import Loader from '../../components/Loader'
+import Message from '../../components/Message'
 
 /** This is the Product Screen Page. 
  * 

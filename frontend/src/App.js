@@ -4,7 +4,8 @@ import {Container}                      from 'react-bootstrap'
 import Header                           from './components/Header'
 import Footer                           from './components/Footer'
 import HomeScreen                       from './screens/HomeScreen'
-import ProductScreen                    from './screens/ProductScreen'
+import ProductScreen                    from './screens/product/ProductScreen'
+import ProductListScreen                from "./screens/product/ProductListScreen";
 import CartScreen                       from './screens/checkout/CartScreen'
 import LoginScreen                      from './screens/user/LoginScreen'
 import UserListScreen                   from './screens/user/UserListScreen'
@@ -15,6 +16,7 @@ import ShippingScreen                   from './screens/checkout/ShippingScreen'
 import PaymentScreen                    from './screens/checkout/PaymentScreen'
 import PlaceOrderScreen                 from './screens/checkout/PlaceOrderScreen'
 import OrderScreen                      from './screens/checkout/OrderScreen'
+
 
 
 const App = () => {
@@ -36,6 +38,8 @@ const App = () => {
 
           <Route path='/admin/users-list' component={UserListScreen}/>
           <Route path='/admin/user/:id/edit' component={UserEditScreen}/>
+
+          <Route path='/admin/products-list' component={ProductListScreen}/>
         </Container>
       </main>
       <Footer />
