@@ -4,7 +4,7 @@ import Product from '../models/productModel.js'
 // @desc    Fetch all products
 // @route   GET /api/products
 // @access  Public
-const getProducts = asyncHandler(async (req, res) => {
+export const getProducts = asyncHandler(async (req, res) => {
     const products = await Product.find({});
     res.json(products)
 });
@@ -12,7 +12,7 @@ const getProducts = asyncHandler(async (req, res) => {
 // @desc    Fetch a single product by id
 // @route   GET /api/products/:id
 // @access  Public
-const getProductById = asyncHandler(async(req, res) => {
+export const getProductById = asyncHandler(async(req, res) => {
     const product = await Product.findById(req.params.id);
 
     if(product){
@@ -26,9 +26,76 @@ const getProductById = asyncHandler(async(req, res) => {
 // @desc    Fetch all products
 // @route   GET /api/products/admin
 // @access  Private/Admin
-const getProductsAdmin = asyncHandler(async (req, res) => {
+export const getProductsAdmin = asyncHandler(async (req, res) => {
     const products = await Product.find({});
     res.json(products)
 });
 
-export {getProducts, getProductById, getProductsAdmin}
+// @desc    Create a product
+// @route   POST /api/products/admin/
+// @access  Private/Admin
+export const createProduct = asyncHandler(async (req, res) => {
+    const product = new Product({
+        name: 'Sample name',
+        price: 0,
+        user: req.user._id,
+        image: 'images/sample.jpg',
+        brand: 'Sample brand',
+        category: 'Sample category',
+        countInStock: 0,
+        numReviews: 0,
+        description: 'Sample description'
+    }); 
+
+    const createdProduct = product.save(); 
+
+    res.status(201).json(createdProduct); 
+});
+
+// @desc    Update Product
+// @route   PUT /api/products/admin/:id
+// @access  Private/Admin
+export const updateProduct = asyncHandler(async (req, res) => {
+    const { name,price,image,brand,category,countInStock,
+            description} = req.body.data;
+
+    const productId = req.params.id;
+   
+    const product = await Product.findById(productId);
+    
+    if(product){
+       
+        product.name =  name;
+        product.price =  price;
+        product.user =   req.user._id;
+        product.image =  image;
+        product.brand =  brand;
+        product.category =  category;
+        product.countInStock =  countInStock;
+        product.description = description;
+
+        const updatedProduct = await product.save();
+
+        res.json({message: "Product updated", updatedProduct});
+    }else{
+        res.status(404);
+        throw new Error('Product not found');
+    }
+});
+
+// @desc    Delete product
+// @route   DELETE /api/products/admin/:id
+// @access  Private/Admin
+export const deleteProduct = asyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id);
+
+    if(product){
+        await product.remove();
+        res.json({message: 'Product removed'});
+    }else{
+        res.status(404);
+        throw new Error('Product not found');
+    }
+});
+
+//export {getProducts, getProductById, getProductsAdmin, deleteProduct, createProduct, updateProduct}

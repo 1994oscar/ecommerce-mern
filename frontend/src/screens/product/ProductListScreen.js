@@ -4,7 +4,7 @@ import {Table, Button}              from 'react-bootstrap'
 import {useDispatch, useSelector}   from "react-redux"
 import Message                      from '../../components/Message'
 import Loader                       from '../../components/Loader'
-import {listProductsAdmin}          from "../../actions/productAction"
+import {listProductsAdmin, deleteProductAdmin}          from "../../actions/productAction"
 
 
 const ProductListScreen = ({history}) => {
@@ -16,6 +16,9 @@ const ProductListScreen = ({history}) => {
     const productsList = useSelector(state => state.productListAdmin);
     const {loading, success, error, products} = productsList;
 
+    const deleteProduct = useSelector(state => state.productDeleteAdmin);
+    const {loading:deleteLoading, success:deleteSuccess, error:deleteError, message: deleteMessage} = deleteProduct;
+    
     useEffect(() => {
 
         /** Only admin user can access to users list */
@@ -25,13 +28,13 @@ const ProductListScreen = ({history}) => {
             history.push('/login');
         }
 
-    }, [dispatch, history]);
+    }, [dispatch, history, userInfo, deleteSuccess]);
 
     const deleteProductHandler = (userId) => {
         if(window.confirm('Are you sure?')){
-            //dispatch(deleteUser(userId));
+            dispatch(deleteProductAdmin(userId));
         }
-
+ 
     }
 
     return (
@@ -39,7 +42,8 @@ const ProductListScreen = ({history}) => {
             <h1>Products</h1>
             {loading    && <Loader/>}
             {error && <Message variant='danger'>{error}</Message>}
-
+            {deleteSuccess && <Message variant='success'>{deleteMessage}</Message>}
+            {deleteError && <Message variant='danger'>{deleteError}</Message>}
             {success && (
                 <Table striped bordered hover responsive className='table-sm'>
                     <thead>
