@@ -1,13 +1,13 @@
 import React, {useEffect}           from 'react'
 import {LinkContainer}              from 'react-router-bootstrap'
-import {Table, Button}              from 'react-bootstrap'
+import {Table, Button, Row, Col}              from 'react-bootstrap'
 import {useDispatch, useSelector}   from "react-redux"
 import Message                      from '../../components/Message'
 import Loader                       from '../../components/Loader'
-import {listProductsAdmin, deleteProductAdmin}          from "../../actions/productAction"
+import {listProductsAdmin,createProductsAdmin, deleteProductAdmin}          from "../../actions/productAction"
+import {PRODUCT_CREATE_ADMIN_RESET } from '../../constants/productsConstants'
 
-
-const ProductListScreen = ({history}) => {
+const ProductListScreen = ({history}) => { 
 
     const dispatch = useDispatch();
     const userLogin = useSelector(state => state.userLogin);
@@ -16,19 +16,39 @@ const ProductListScreen = ({history}) => {
     const productsList = useSelector(state => state.productListAdmin);
     const {loading, success, error, products} = productsList;
 
+    const productCreate = useSelector(state => state.productCreateAdmin);
+    const {success:createSuccess, product:productData, error:createError} = productCreate; 
+    
     const deleteProduct = useSelector(state => state.productDeleteAdmin);
     const {loading:deleteLoading, success:deleteSuccess, error:deleteError, message: deleteMessage} = deleteProduct;
     
     useEffect(() => {
-
+        dispatch({type:PRODUCT_CREATE_ADMIN_RESET }); 
         /** Only admin user can access to users list */
-        if(userInfo && userInfo.isAdmin){
+        /*if(userInfo && userInfo.isAdmin){
             dispatch(listProductsAdmin());
-        }else {
+            /*if(productData && createSuccess){
+                //dispatch({type:PRODUCT_CREATE_RESET_ADMIN });
+                history.push(`admin/products/edit/${productData._id}`); 
+                         
+            }else{
+               
+            }
+        }else { 
+            history.push('/login');
+        }*/
+
+        if(!userInfo.isAdmin){
             history.push('/login');
         }
 
-    }, [dispatch, history, userInfo, deleteSuccess]);
+        if(createSuccess){
+            history.push(`/admin/products/edit/${productData._id}`); 
+        }else{
+            dispatch(listProductsAdmin());
+        }
+
+    }, [dispatch, history, userInfo, deleteSuccess, createSuccess, productData]);
 
     const deleteProductHandler = (userId) => {
         if(window.confirm('Are you sure?')){
@@ -37,13 +57,28 @@ const ProductListScreen = ({history}) => {
  
     }
 
+    const createProductHandler = (e) => {
+        e.preventDefault();      
+        dispatch(createProductsAdmin());       
+    }
+
     return (
         <>
             <h1>Products</h1>
+            <Row className='align-items-center'>
+                <Col>
+                </Col>
+                <Col className='text-right'>
+                    <Button className='my-3' onClick={createProductHandler}>
+                        <i className='fas fa-plus'></i> Create Product
+                    </Button>
+                </Col>
+            </Row>
             {loading    && <Loader/>}
             {error && <Message variant='danger'>{error}</Message>}
             {deleteSuccess && <Message variant='success'>{deleteMessage}</Message>}
             {deleteError && <Message variant='danger'>{deleteError}</Message>}
+            {createError && <Message variant='danger'>{createError}</Message>}
             {success && (
                 <Table striped bordered hover responsive className='table-sm'>
                     <thead>
@@ -68,7 +103,7 @@ const ProductListScreen = ({history}) => {
                                 <td>{product.category}</td>
                                 <td>{product.brand}</td>
                                 <td>
-                                    <LinkContainer to={`/admin/products/${product._id}/edit`}>
+                                    <LinkContainer to={`/admin/products/edit/${product._id}`}>
                                         <Button variant='warning' className='btn-sm'> <i className='fas fa-edit'></i> </Button>
                                     </LinkContainer>
                                     <Button variant='danger' className='btn-sm' onClick={ () => deleteProductHandler(product._id)}><i className='fas fa-trash'></i></Button>

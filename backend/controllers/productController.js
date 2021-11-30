@@ -47,7 +47,7 @@ export const createProduct = asyncHandler(async (req, res) => {
         description: 'Sample description'
     }); 
 
-    const createdProduct = product.save(); 
+    const createdProduct = await product.save(); 
 
     res.status(201).json(createdProduct); 
 });
@@ -60,11 +60,9 @@ export const updateProduct = asyncHandler(async (req, res) => {
             description} = req.body.data;
 
     const productId = req.params.id;
-   
     const product = await Product.findById(productId);
     
-    if(product){
-       
+    if(product){      
         product.name =  name;
         product.price =  price;
         product.user =   req.user._id;

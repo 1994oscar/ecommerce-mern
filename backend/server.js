@@ -8,12 +8,13 @@ import connectDB from './config/db.js'
 import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
+import uploadRoutes from './routes/uploadRoutes.js' 
 
 const __dirname = path.resolve();
 
 dotenv.config({ path: path.join(__dirname, '.env') });
 
-connectDB(); 
+connectDB();  
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(express.json());
 app.use('/api/products', productRoutes); 
 app.use('/api/orders', orderRoutes); 
 app.use('/api/users', userRoutes);
+app.use('/api/upload', uploadRoutes);
 app.get('/api/config/paypal', (req, res) => res.send(process.env.PAYPAL_CLIENT_ID));
 
 
@@ -39,7 +41,7 @@ if(process.env.NODE_ENV === 'production'){
     /** ---      Develop Route          --- */
         app.get('/', (req, res) => {
             res.send('API is running...');
-        });
+        }); 
 }
  
 app.use(notFound);

@@ -4,7 +4,19 @@ import {
     PRODUCT_LIST_FAIL,
     PRODUCT_DETAILS_SUCCESS,
     PRODUCT_DETAILS_REQUEST,
-    PRODUCT_DETAILS_FAIL, PRODUCT_LIST_ADMIN_REQUEST, PRODUCT_LIST_ADMIN_SUCCESS, PRODUCT_LIST_ADMIN_FAIL, PRODUCT_DELETE_ADMIN_REQUEST, PRODUCT_DELETE_ADMIN_SUCCESS, PRODUCT_DELETE_ADMIN_FAIL, PRODUCT_CREATE_ADMIN_REQUEST, PRODUCT_CREATE_ADMIN_SUCCESS, PRODUCT_CREATE_ADMIN_FAIL
+    PRODUCT_DETAILS_FAIL,
+    PRODUCT_LIST_ADMIN_REQUEST,
+    PRODUCT_LIST_ADMIN_SUCCESS, 
+    PRODUCT_LIST_ADMIN_FAIL, 
+    PRODUCT_DELETE_ADMIN_REQUEST,
+    PRODUCT_DELETE_ADMIN_SUCCESS, 
+    PRODUCT_DELETE_ADMIN_FAIL, 
+    PRODUCT_CREATE_ADMIN_REQUEST, 
+    PRODUCT_CREATE_ADMIN_SUCCESS, 
+    PRODUCT_CREATE_ADMIN_FAIL, 
+    PRODUCT_UPDATE_ADMIN_REQUEST, 
+    PRODUCT_UPDATE_ADMIN_SUCCESS, 
+    PRODUCT_UPDATE_ADMIN_FAIL
 } from '../constants/productsConstants'
 import axios from 'axios'
 
@@ -74,8 +86,9 @@ export const listProductsAdmin = () => async (dispatch, getState) => {
     }
 }
 
-export const createProductsAdmin = (products) => async (dispatch, getState) => {
+export const createProductsAdmin = () => async (dispatch, getState) => {
     try {
+       
         dispatch({type: PRODUCT_CREATE_ADMIN_REQUEST})
 
         const {userLogin: {userInfo}} = getState();
@@ -83,16 +96,44 @@ export const createProductsAdmin = (products) => async (dispatch, getState) => {
         axios.defaults.headers.common['Content-Type']  = 'application/json';
         axios.defaults.headers.common['Authorization'] = `Bearer ${userInfo.token}`;
 
-        const {data} = await axios.post('/api/products/admin', products);
-
+        const {data} = await axios.post('/api/products/admin');
+     
         dispatch({
             type: PRODUCT_CREATE_ADMIN_SUCCESS,
-            payload: data
+            payload: data,
         });
 
     } catch (error) {
         dispatch({
             type: PRODUCT_CREATE_ADMIN_FAIL,
+            payload: error.response && error.response.data.message ?
+                error.response.data.message : error.message
+        });
+    }
+}
+
+
+export const updateProductAdmin = (product) => async (dispatch, getState) => {
+    try {
+       
+        dispatch({type: PRODUCT_UPDATE_ADMIN_REQUEST})
+
+        const {userLogin: {userInfo}} = getState();
+
+        axios.defaults.headers.common['Content-Type']  = 'application/json';
+        axios.defaults.headers.common['Authorization'] = `Bearer ${userInfo.token}`;
+
+        const {data} = await axios.put(`/api/products/admin/${product._id}`, {data:product} );
+       
+        dispatch({
+            type: PRODUCT_UPDATE_ADMIN_SUCCESS,
+            payload: data.updatedProduct,
+            message: data.message
+        });
+
+    } catch (error) {
+        dispatch({
+            type: PRODUCT_UPDATE_ADMIN_FAIL,
             payload: error.response && error.response.data.message ?
                 error.response.data.message : error.message
         });

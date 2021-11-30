@@ -6,7 +6,7 @@ import Order from '../models/orderModel.js'
 // @access  Private
 const addOrderItems = asyncHandler(async (req, res) => {
 
-    //console.log(req.body)
+   
    const {  
         orderItems, 
         shippingAddress,
@@ -17,10 +17,10 @@ const addOrderItems = asyncHandler(async (req, res) => {
         totalPrice
     } = req.body;
 
-    //console.log(req.body)
+    
 
 if(orderItems && orderItems.length === 0) {
-    res.status(400); //Bad Request
+    res.status(400); 
     throw new Error('No order items');
 } else {
     
@@ -35,7 +35,6 @@ if(orderItems && orderItems.length === 0) {
         totalPrice
     });
 
-    //Create the new Order
     const createOrder = await order.save();
 
     res.status(201).json(createOrder);
@@ -106,4 +105,20 @@ const getMyOrders = asyncHandler(async (req, res) => {
     
 });
 
-export {addOrderItems , getOrderById, updateOrderToPaid, getMyOrders}; 
+// @desc    Get all orders 
+// @route   GET /api/orders/admin/
+// @access  Private/Admin
+
+const getOrdersAdmin = asyncHandler(async (req, res) => {
+
+    const orders = await Order.find({});
+    if(orders){
+        res.json(orders)
+    }else{
+       res.status(404);
+       throw new Erros('Orders not found');
+    }
+    
+});
+
+export {addOrderItems , getOrderById, updateOrderToPaid, getMyOrders, getOrdersAdmin}; 
