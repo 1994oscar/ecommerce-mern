@@ -13,7 +13,7 @@ const OrderListAdminScreen = ({history}) => {
     const {userInfo} = userLogin;
 
     const getOrders = useSelector(state => state.orderGetAdmin);
-    const {success, error, orders} = getOrders;
+    const {success, loading, error, orders} = getOrders;
    
     useEffect(() => {
       
@@ -29,7 +29,7 @@ const OrderListAdminScreen = ({history}) => {
     return (
         <>
             <h1>Orders</h1>           
-           
+            {loading && <Loader />}
             {success && (
                 <Table striped bordered hover responsive className='table-sm'>
                     <thead>
