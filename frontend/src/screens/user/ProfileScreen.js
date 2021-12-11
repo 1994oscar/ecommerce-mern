@@ -6,15 +6,16 @@ import Message  from '../../components/Message'
 import Loader   from '../../components/Loader'
 import {getUserDetails, update, login}  from '../../actions/userAction'
 import {getMyOrders} from '../../actions/orderAction'
-const ProfileScreen = ({location, history}) => {
+
+const ProfileScreen = ({history}) => {
+
+    const dispatch      = useDispatch();
 
     const [name, setName]           = useState('');
     const [email, setEmail]         = useState('');
     const [password, setPassword]   = useState('');
     const [confirmPassword, setConfirmPassword]   = useState('');
     const [message, setMessage]     = useState(null);
-
-    const dispatch      = useDispatch();
 
     const userDetails   = useSelector(state => state.userDetails);
     const {loading, error, user} = userDetails;
@@ -27,8 +28,6 @@ const ProfileScreen = ({location, history}) => {
 
     const orderGetMy = useSelector(state => state.orderGetMy);
     const {orders, success:successOrders, loading:loadingOrders, error:errorOrders} = orderGetMy;
-
-
 
     useEffect(()=> {    
         if(!userInfo){
@@ -48,8 +47,6 @@ const ProfileScreen = ({location, history}) => {
         dispatch(getMyOrders());
     }, [dispatch])
 
-   
-
     const submitHandler = (e) => {
         e.preventDefault();      
         if(password !== confirmPassword){
@@ -59,8 +56,6 @@ const ProfileScreen = ({location, history}) => {
         dispatch(update({id:user._id, name, email, password}))
     }
 
-
- 
     return (
         <Row>
         <Col md={3}>
@@ -152,13 +147,11 @@ const ProfileScreen = ({location, history}) => {
                                     </tr> 
                                 ))
                              }
-                         </tbody> 
-                  
+                         </tbody>                 
                  </Table>
              )}
         </Col>
-    </Row>
-    
+    </Row>   
     )
 }
 

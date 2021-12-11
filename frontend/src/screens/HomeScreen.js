@@ -1,24 +1,22 @@
-import React , {useEffect} from 'react'
-import Product from '../components/Product'
-import {Row, Col, Container} from 'react-bootstrap'
-import {useDispatch, useSelector} from 'react-redux'
-import {listProducts} from '../actions/productAction'
-import Message from '../components/Message'
-import Loader from '../components/Loader'
+import React , {useEffect}          from 'react'
+import Product                      from '../components/Product'
+import {Row, Col}                   from 'react-bootstrap'
+import {useDispatch, useSelector}   from 'react-redux'
+import {listProducts}               from '../actions/productAction'
+import Message                      from '../components/Message'
+import Loader                       from '../components/Loader'
 
-/** This is the Home page widget */
+const HomeScreen = ({match}) => {
 
-const HomeScreen = () => {
-
+    const keyword = match.params.keyword;
+   
     const dispatch = useDispatch()
     const productList = useSelector(state => state.productList)
     const {loading, error, products } = productList 
 
     useEffect(() => {
-        dispatch(listProducts())
-    }, [dispatch]);
-
-    //const products = []
+        dispatch(listProducts(keyword))
+    }, [dispatch, keyword]);
 
     return (
        <>

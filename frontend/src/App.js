@@ -18,6 +18,7 @@ import PaymentScreen                    from './screens/checkout/PaymentScreen'
 import PlaceOrderScreen                 from './screens/checkout/PlaceOrderScreen'
 import OrderScreen                      from './screens/checkout/OrderScreen'
 import OrderListAdminScreen             from './screens/order/OrderListAdminScreen'
+import OrderAdminDetails                from './screens/order/OrderAdminDetails'
 
 
 const App = () => {
@@ -26,7 +27,9 @@ const App = () => {
       <Header/>
       <main className='py-3'>
         <Container>
+         
           <Route path='/'             component={HomeScreen} exact/>
+          <Route path='/search/:keyword' component={HomeScreen} />
           <Route path='/login'        component={LoginScreen}/>
           <Route path='/register'     component={RegisterScreen}/>
           <Route path='/profile'      component={ProfileScreen}/>
@@ -38,6 +41,7 @@ const App = () => {
           <Route path='/order/:id'    component={OrderScreen}/>
 
           <Route path='/admin/orders-list' component={OrderListAdminScreen } />
+          <Route path='/admin/order/details/:id' component={OrderAdminDetails} />
 
           <Route path='/admin/users-list' component={UserListScreen}/>
           <Route path='/admin/user/:id/edit' component={UserEditScreen}/>

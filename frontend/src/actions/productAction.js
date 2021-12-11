@@ -16,16 +16,19 @@ import {
     PRODUCT_CREATE_ADMIN_FAIL, 
     PRODUCT_UPDATE_ADMIN_REQUEST, 
     PRODUCT_UPDATE_ADMIN_SUCCESS, 
-    PRODUCT_UPDATE_ADMIN_FAIL
+    PRODUCT_UPDATE_ADMIN_FAIL,
+    PRODUCT_CREATE_REVIEW_REQUEST,
+    PRODUCT_CREATE_REVIEW_SUCCESS,
+    PRODUCT_CREATE_REVIEW_FAIL
 } from '../constants/productsConstants'
 import axios from 'axios'
 
-export const listProducts = () => async (dispatch) => {
+export const listProducts = (keyword = '') => async (dispatch) => {
     try {
         
         dispatch({type: PRODUCT_LIST_REQUEST});
 
-        const {data} = await axios.get('/api/products');
+        const {data} = await axios.get(`/api/products?keyword=${keyword}`);
 
         dispatch({
             type: PRODUCT_LIST_SUCCESS,
@@ -134,6 +137,31 @@ export const updateProductAdmin = (product) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: PRODUCT_UPDATE_ADMIN_FAIL,
+            payload: error.response && error.response.data.message ?
+                error.response.data.message : error.message
+        });
+    }
+}
+
+export const createProductReview = (productId, review) => async (dispatch, getState) => {
+    try {
+       
+        dispatch({type: PRODUCT_CREATE_REVIEW_REQUEST})
+
+        const {userLogin: {userInfo}} = getState();
+
+        axios.defaults.headers.common['Content-Type']  = 'application/json';
+        axios.defaults.headers.common['Authorization'] = `Bearer ${userInfo.token}`;
+
+        const {data} = await axios.post(`/api/products/${productId}/reviews`, {data:review});
+        dispatch({
+            type: PRODUCT_CREATE_REVIEW_SUCCESS,
+            payload: data.message
+        });
+
+    } catch (error) {
+        dispatch({
+            type: PRODUCT_CREATE_REVIEW_FAIL,
             payload: error.response && error.response.data.message ?
                 error.response.data.message : error.message
         });

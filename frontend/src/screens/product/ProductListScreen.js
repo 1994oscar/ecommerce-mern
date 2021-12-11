@@ -20,25 +20,13 @@ const ProductListScreen = ({history}) => {
     const {success:createSuccess, product:productData, error:createError} = productCreate; 
     
     const deleteProduct = useSelector(state => state.productDeleteAdmin);
-    const {loading:deleteLoading, success:deleteSuccess, error:deleteError, message: deleteMessage} = deleteProduct;
+    const {success:deleteSuccess, error:deleteError, message: deleteMessage} = deleteProduct;
     
     useEffect(() => {
+        
         dispatch({type:PRODUCT_CREATE_ADMIN_RESET }); 
-        /** Only admin user can access to users list */
-        /*if(userInfo && userInfo.isAdmin){
-            dispatch(listProductsAdmin());
-            /*if(productData && createSuccess){
-                //dispatch({type:PRODUCT_CREATE_RESET_ADMIN });
-                history.push(`admin/products/edit/${productData._id}`); 
-                         
-            }else{
-               
-            }
-        }else { 
-            history.push('/login');
-        }*/
-
-        if(!userInfo.isAdmin){
+       
+        if(!userInfo || !userInfo.isAdmin){
             history.push('/login');
         }
 

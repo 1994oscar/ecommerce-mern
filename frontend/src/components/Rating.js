@@ -1,4 +1,4 @@
-
+import React from 'react'
 import PropTypes from 'prop-types'
 /** 
  *  <span>{text && text}</span> =  <span>{text ? text : ''}</span>

@@ -7,21 +7,21 @@ import {savePaymentMethod}          from '../../actions/cartAction'
 
 const PaymentScreen = ({history}) => {
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch(); 
 
-    const cart = useSelector(state => state.cart)
-    const {shippingAddress} = cart
+    const cart = useSelector(state => state.cart); 
+    const {shippingAddress} = cart; 
 
     if(!shippingAddress) {
-        history.push('/shipping')
+        history.push('/shipping'); 
     }
 
-    const [paymentMethod, setPaymentMethod] = useState('PayPal') 
+    const [paymentMethod, setPaymentMethod] = useState('PayPal');  
 
     const submitHandler = (e) => {
-        e.preventDefault()
-        dispatch(savePaymentMethod(paymentMethod))
-        history.push('/placeorder')
+        e.preventDefault(); 
+        dispatch(savePaymentMethod(paymentMethod)); 
+        history.push('/placeorder'); 
     }
 
     return (

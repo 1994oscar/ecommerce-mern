@@ -28,7 +28,7 @@ const authUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-    console.log(req.body)
+    
     const {name, email, password} = req.body.data;
     
     const userExists = await User.findOne({email})
@@ -65,7 +65,7 @@ const registerUser = asyncHandler(async (req, res) => {
 const getUserProfile = asyncHandler(async (req, res) => {
     //Access to the global authorized user data req.user._id
     const userId = req.user._id;
-    //------------------------------------------------------
+  
     const user = await User.findById(userId);
 
     if(user){
@@ -89,7 +89,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     //Access to the global authorized user data req.user._id
     const userId = req.user._id;
  
-    //-----------------------------------------
     const user = await User.findById(userId);
     
     if(user){

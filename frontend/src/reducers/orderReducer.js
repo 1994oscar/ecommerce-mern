@@ -15,7 +15,10 @@ import {
     ORDER_LIST_MY_RESET,
     ORDER_GET_ADMIN_REQUEST,
     ORDER_GET_ADMIN_SUCCESS,
-    ORDER_GET_ADMIN_FAIL
+    ORDER_GET_ADMIN_FAIL,
+    ORDER_SET_DELIVERED_ADMIN_REQUEST,
+    ORDER_SET_DELIVERED_ADMIN_SUCCESS,
+    ORDER_SET_DELIVERED_ADMIN_FAIL
 } from '../constants/orderConstant'
 
 const orderCreateReducer = (state = {}, action) => {
@@ -155,4 +158,33 @@ const orderGetAdminReducer = (state = {orders: []}, action) => {
     }
 }
 
-export  {orderCreateReducer, orderGetReducer, orderPayReducer, orderListMyReducer, orderGetAdminReducer}
+
+const orderSetDeliveredAdminReducer = (state = {}, action) => {
+    switch (action.type) {
+        case ORDER_SET_DELIVERED_ADMIN_REQUEST:
+            return {
+                loading: true,
+            }
+          
+        case ORDER_SET_DELIVERED_ADMIN_SUCCESS:
+            return {
+                loading: false,
+                success: true,
+            }
+
+        case ORDER_SET_DELIVERED_ADMIN_FAIL:
+            return {
+                loading: false,
+                error: action.payload,
+                success: false,
+            }
+    
+        default:
+            return state;
+           
+    }
+}
+
+export  {orderCreateReducer, orderGetReducer, 
+            orderPayReducer, orderListMyReducer, 
+            orderGetAdminReducer, orderSetDeliveredAdminReducer}

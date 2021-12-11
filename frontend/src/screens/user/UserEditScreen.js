@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {Form, Button, Row, Col}     from 'react-bootstrap'
+import {Form, Button}     from 'react-bootstrap'
 import {useDispatch, useSelector}   from 'react-redux'
 import Message  from '../../components/Message'
 import Loader   from '../../components/Loader'
@@ -16,12 +16,12 @@ const UserEditScreen = ({location, match}) => {
     const dispatch = useDispatch();
 
     const userInfo = useSelector(state => state.userInfo);
-    const {loading, error, success, user} = userInfo;
+    const {loading, success, user} = userInfo;
 
     const userUpdate = useSelector(state => state.userUpdateAdmin);
-    const {loading:updateLoading, error:updateError, success:updateSuccess, user:updateUser} = userUpdate;
+    const {loading:updateLoading, error:updateError, success:updateSuccess} = userUpdate;
 
-    const redirect = location.search ? location.search.split('=')[1] : '/';
+   
 
     useEffect(() => {
         dispatch(getUserById(match.params.id));

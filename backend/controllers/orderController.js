@@ -4,9 +4,7 @@ import Order from '../models/orderModel.js'
 // @desc    Create new order
 // @route   POST /api/orders
 // @access  Private
-const addOrderItems = asyncHandler(async (req, res) => {
-
-   
+const addOrderItems = asyncHandler(async (req, res) => { 
    const {  
         orderItems, 
         shippingAddress,
@@ -16,8 +14,6 @@ const addOrderItems = asyncHandler(async (req, res) => {
         shippingPrice,
         totalPrice
     } = req.body;
-
-    
 
 if(orderItems && orderItems.length === 0) {
     res.status(400); 
@@ -121,4 +117,25 @@ const getOrdersAdmin = asyncHandler(async (req, res) => {
     
 });
 
-export {addOrderItems , getOrderById, updateOrderToPaid, getMyOrders, getOrdersAdmin}; 
+
+// @desc    Update order to delivered 
+// @route   PUT /api/orders/admin/:id/deliver
+// @access  Private/Admin
+
+const updateOrderToDelivered = asyncHandler( async (req, res) => {
+    const order = await Order.findById(req.params.id);
+
+    if(order){
+        order.isDelivered = true;
+        order.deliveredAt = Date.now();
+
+        const updateOrder = await order.save();
+
+        res.json(updateOrder);
+    }else{
+        res.status(404);
+        throw new Error('Order not found');
+    }
+});
+
+export {addOrderItems , getOrderById, updateOrderToPaid, getMyOrders, getOrdersAdmin, updateOrderToDelivered}; 

@@ -26,7 +26,7 @@ import {
     USER_INFO_FAIL, USER_UPDATE_ADMIN_REQUEST, USER_UPDATE_ADMIN_SUCCESS, USER_UPDATE_ADMIN_FAIL
 } from '../constants/userConstant.js'
 
-export const userLoginReducer = (state = { }, action) => {
+export const userLoginReducer = (state = {}, action) => {
 
     switch (action.type) {
         case USER_LOGIN_REQUEST:
@@ -43,7 +43,7 @@ export const userLoginReducer = (state = { }, action) => {
     }
 }
 
-export const userRegisterReducer = (state = { }, action) => {
+export const userRegisterReducer = (state = {}, action) => {
 
     switch (action.type) {
         case USER_REGISTER_REQUEST:

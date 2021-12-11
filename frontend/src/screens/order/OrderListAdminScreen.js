@@ -1,6 +1,6 @@
 import React, {useEffect}           from 'react'
 import {LinkContainer}              from 'react-router-bootstrap'
-import {Table, Button, Row, Col}              from 'react-bootstrap'
+import {Table, Button}              from 'react-bootstrap'
 import {useDispatch, useSelector}   from "react-redux"
 import Message                      from '../../components/Message'
 import Loader                       from '../../components/Loader'
@@ -15,7 +15,7 @@ const OrderListAdminScreen = ({history}) => {
     const getOrders = useSelector(state => state.orderGetAdmin);
     const {success, loading, error, orders} = getOrders;
    
-    useEffect(() => {
+    useEffect(() => { 
       
         if(!userInfo.isAdmin){
             history.push('/login');
@@ -54,7 +54,7 @@ const OrderListAdminScreen = ({history}) => {
                                 <td><span style={order.isDelivered ? {color:'green'}: {color:'red'}}>{order.isDelivered ? "Delivered": "Not Delivered"}</span></td>
                                 <td>{order.paymentMethod}</td>
                                 <td>
-                                    <LinkContainer to={`/admin/orders/edit/${order._id}`}>
+                                    <LinkContainer to={`/admin/order/details/${order._id}`}>
                                         <Button variant='info' className='btn-sm'> <i className='fas fa-eye'></i> </Button>
                                     </LinkContainer>                                  
                                 </td>

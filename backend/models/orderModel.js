@@ -68,7 +68,7 @@ const orderSchema = mongoose.Schema({
         type: Date
     }
 }, {
-    timestamp: true
+    timestamps: true
 });
 
 //We build the Order model

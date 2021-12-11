@@ -25,17 +25,17 @@ const RegisterScreen = ({location, history}) => {
 
     useEffect(()=> {    
         if(userInfo){
-            history.push(redirect)         
+            history.push(redirect);         
         }
-    }, [history, userInfo, redirect])
+    }, [history, userInfo, redirect]);
 
     const submitHandler = (e) => {
         e.preventDefault();      
         if(password !== confirmPassword){
-            setMessage('Passwords do not match')
+            setMessage('Passwords do not match');
         }
-        //DISPATCH REGISTER
-        dispatch(register(name,email, password))
+       
+        dispatch(register(name,email, password));
     }
  
     return (
@@ -43,7 +43,7 @@ const RegisterScreen = ({location, history}) => {
             <h1>Sign Up</h1>
 
             {message    && <Message variant='danger'>{message}</Message>}
-            {error      &&   <Message variant='danger'>{error}</Message>}
+            {error      && <Message variant='danger'>{error}</Message>}
             {loading    && <Loader/>}
 
             <Form onSubmit={submitHandler}>

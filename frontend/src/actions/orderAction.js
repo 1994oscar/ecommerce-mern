@@ -9,7 +9,10 @@
         ORDER_LIST_MY_FAIL,
         ORDER_GET_ADMIN_SUCCESS,
         ORDER_GET_ADMIN_REQUEST,
-        ORDER_GET_ADMIN_FAIL
+        ORDER_GET_ADMIN_FAIL,
+        ORDER_SET_DELIVERED_ADMIN_REQUEST,
+        ORDER_SET_DELIVERED_ADMIN_SUCCESS,
+        ORDER_SET_DELIVERED_ADMIN_FAIL
     } from '../constants/orderConstant'
     import axios from 'axios'
 
@@ -25,8 +28,7 @@
 
             axios.defaults.headers.common['Content-Type']   = 'application/json';
             axios.defaults.headers.common['Authorization']  = `Bearer ${userInfo.token}`;
-
-            /** Request */
+         
             const {data:newOrder} = await axios.post(`/api/orders`, order);
         
             dispatch({
@@ -58,7 +60,7 @@
             axios.defaults.headers.common['Content-Type']   = 'application/json';
             axios.defaults.headers.common['Authorization']  = `Bearer ${userInfo.token}`;
             
-            /** Request */
+          
             const {data:order} = await axios.get(`/api/orders/${id}`);
 
             dispatch({
@@ -89,14 +91,13 @@
             axios.defaults.headers.common['Content-Type']   = 'application/json';
             axios.defaults.headers.common['Authorization']  = `Bearer ${userInfo.token}`;
             
-            /** Request */
+            
             const {data:order} = await axios.put(`/api/orders/${orderId}/pay`, paymentResult);
 
             dispatch({
                 type: ORDER_PAY_SUCCESS, 
                 payload: order 
             });
-
 
         } catch (error) {
             dispatch({
@@ -119,8 +120,7 @@
             const {userLogin: {userInfo}} = getState(); 
             axios.defaults.headers.common['Content-Type']   = 'application/json';
             axios.defaults.headers.common['Authorization']  = `Bearer ${userInfo.token}`;
-            
-            /** Request */
+                      
             const {data:orders} = await axios.get(`/api/orders/myorders`);
 
             dispatch({
@@ -149,8 +149,7 @@
             const {userLogin: {userInfo}} = getState(); 
             axios.defaults.headers.common['Content-Type']   = 'application/json';
             axios.defaults.headers.common['Authorization']  = `Bearer ${userInfo.token}`;
-            
-            /** Request */
+                      
             const {data:orders} = await axios.get(`/api/orders/admin`);
             console.log(orders)
             dispatch({
@@ -162,6 +161,35 @@
         } catch (error) { 
             dispatch({
                 type: ORDER_GET_ADMIN_FAIL,
+                payload: error.response && error.response.data.messages 
+                ? error.response.data.message
+                : error.message,
+            });
+        }
+    }
+
+    export const setAsDeliveredAdmin = (id) => async (dispatch, getState) => {
+        
+        try {
+
+            dispatch({
+                type: ORDER_SET_DELIVERED_ADMIN_REQUEST
+            });
+        
+            const {userLogin: {userInfo}} = getState(); 
+            axios.defaults.headers.common['Content-Type']   = 'application/json';
+            axios.defaults.headers.common['Authorization']  = `Bearer ${userInfo.token}`;
+                    
+            await axios.put(`/api/orders/admin/${id}/deliver`);
+           
+            dispatch({
+                type: ORDER_SET_DELIVERED_ADMIN_SUCCESS,
+            });
+
+
+        } catch (error) { 
+            dispatch({
+                type: ORDER_SET_DELIVERED_ADMIN_FAIL,
                 payload: error.response && error.response.data.messages 
                 ? error.response.data.message
                 : error.message,
