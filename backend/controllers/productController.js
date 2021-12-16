@@ -5,6 +5,10 @@ import Product from '../models/productModel.js'
 // @route   GET /api/products
 // @access  Public
 export const getProducts = asyncHandler(async (req, res) => {
+
+    const pageSize = 10;
+    const page = Number(req.query.pageNumber) || 1;
+    
     const keyword = req.query.keyword ? 
     {
         name: {
@@ -12,9 +16,11 @@ export const getProducts = asyncHandler(async (req, res) => {
             $options: "i"
         }
     } : {};
-    console.log(keyword)
-    const products = await Product.find({...keyword});
-    res.json(products)
+   
+    const count = await Product.count({...keyword});
+    const products = await Product.find({...keyword}).limit(pageSize).skip(pageSize * (page -1));
+    
+    res.json({products, page, pages: Math.ceil(count / pageSize)});
 });
 
 // @desc    Fetch a single product by id
@@ -35,8 +41,20 @@ export const getProductById = asyncHandler(async(req, res) => {
 // @route   GET /api/products/admin
 // @access  Private/Admin
 export const getProductsAdmin = asyncHandler(async (req, res) => {
-    const products = await Product.find({});
-    res.json(products)
+    const pageSize = 10;
+    const page = Number(req.query.pageNumber) || 1;
+    
+    const keyword = req.query.keyword ? 
+    {
+        name: {
+            $regex: req.query.keyword,
+            $options: "i"
+        }
+    } : {};
+   
+    const count = await Product.count({...keyword});
+    const products = await Product.find({...keyword}).limit(pageSize).skip(pageSize * (page -1));
+    res.json({products, page, pages: Math.ceil(count / pageSize)})
 });
 
 // @desc    Create a product

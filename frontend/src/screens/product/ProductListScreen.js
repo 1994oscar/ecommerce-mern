@@ -6,15 +6,18 @@ import Message                      from '../../components/Message'
 import Loader                       from '../../components/Loader'
 import {listProductsAdmin,createProductsAdmin, deleteProductAdmin}          from "../../actions/productAction"
 import {PRODUCT_CREATE_ADMIN_RESET } from '../../constants/productsConstants'
+import Paginate from '../../components/Paginate'
 
-const ProductListScreen = ({history}) => { 
+const ProductListScreen = ({match, history}) => { 
+
+    const pageNumber = match.params.pageNumber; 
 
     const dispatch = useDispatch();
     const userLogin = useSelector(state => state.userLogin);
     const {userInfo} = userLogin;
 
     const productsList = useSelector(state => state.productListAdmin);
-    const {loading, success, error, products} = productsList;
+    const {loading, success, error, products, page, pages} = productsList;
 
     const productCreate = useSelector(state => state.productCreateAdmin);
     const {success:createSuccess, product:productData, error:createError} = productCreate; 
@@ -33,10 +36,10 @@ const ProductListScreen = ({history}) => {
         if(createSuccess){
             history.push(`/admin/products/edit/${productData._id}`); 
         }else{
-            dispatch(listProductsAdmin());
+            dispatch(listProductsAdmin({keyword: '', pageNumber}));
         }
 
-    }, [dispatch, history, userInfo, deleteSuccess, createSuccess, productData]);
+    }, [dispatch, history, userInfo, deleteSuccess, createSuccess, productData, pageNumber]);
 
     const deleteProductHandler = (userId) => {
         if(window.confirm('Are you sure?')){
@@ -68,6 +71,7 @@ const ProductListScreen = ({history}) => {
             {deleteError && <Message variant='danger'>{deleteError}</Message>}
             {createError && <Message variant='danger'>{createError}</Message>}
             {success && (
+                <>
                 <Table striped bordered hover responsive className='table-sm'>
                     <thead>
                     <tr>
@@ -101,6 +105,8 @@ const ProductListScreen = ({history}) => {
                     }
                     </tbody>
                 </Table>
+                <Paginate pages={pages} page={page} isAdmin={true} />
+                </>
             )}
         </>
     )

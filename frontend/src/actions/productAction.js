@@ -23,12 +23,12 @@ import {
 } from '../constants/productsConstants'
 import axios from 'axios'
 
-export const listProducts = (keyword = '') => async (dispatch) => {
+export const listProducts = (keyword = '', pageNumber = '') => async (dispatch) => {
     try {
         
         dispatch({type: PRODUCT_LIST_REQUEST});
 
-        const {data} = await axios.get(`/api/products?keyword=${keyword}`);
+        const {data} = await axios.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`);
 
         dispatch({
             type: PRODUCT_LIST_SUCCESS,
@@ -64,7 +64,7 @@ export const listProductDetails = (id) => async (dispatch) => {
     }
 }
 
-export const listProductsAdmin = () => async (dispatch, getState) => {
+export const listProductsAdmin = (keyword = '', pageNumber = '') => async (dispatch, getState) => {
     try {
         dispatch({type: PRODUCT_LIST_ADMIN_REQUEST});
 
@@ -73,7 +73,7 @@ export const listProductsAdmin = () => async (dispatch, getState) => {
         axios.defaults.headers.common['Content-Type']  = 'application/json';
         axios.defaults.headers.common['Authorization'] = `Bearer ${userInfo.token}`;
 
-        const {data} = await axios.get('/api/products/admin');
+        const {data} = await axios.get(`/api/products/admin?keyword=${keyword}&pageNumber=${pageNumber}`);
 
         dispatch({
             type: PRODUCT_LIST_ADMIN_SUCCESS,
